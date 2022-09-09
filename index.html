@@ -1,29 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/vue@3.0.2"></script>
-  <title>Document</title>
+  <title>PingPongers</title>
 </head>
+
 <body>
   <div id="app">
-    <div>
-      <h3>Waktu Saat Ini</h3>
-      {{ jam }}
-      <h3>Pendaftaran Peserta</h3>
-      <input type="text" name="nama" v-model="pendaftaran.nama" />
-      <input type="number" name="umur" v-model="pendaftaran.umur" />
-      <button @click="onTambahClick">Tambah</button>
+    <div class="row">
+      <div class="col">
+        <input
+          :placeholder="players[0].placeholder"
+          class="player"
+          v-model="players[0].name"
+        />
+        <h1 class="score">{{ players[0].score }}</h1>
+        <div class="serve">{{ players[0].serve }}</div>
+        <button class="btn-score" @click="onTambahClick(0)">+</button>
+        <button class="btn-score" @click="onKurangClick(0)">-</button>
+      </div>
+      <div class="col">
+        <input
+          :placeholder="players[1].placeholder"
+          class="player"
+          v-model="players[1].name"
+        />
+        <h1 class="score">{{ players[1].score }}</h1>
+        <div class="serve">{{ players[1].serve }}</div>
+        <button class="btn-score" @click="onKurangClick(1)">-</button>
+        <button class="btn-score" @click="onTambahClick(1)">+</button>
+      </div>
     </div>
-    <p v-for="(peserta, index) in daftarPeserta">
-      Nama: {{ peserta.nama }}<br>
-      Umur: {{ peserta.umur }}
-    </p>
-    <button @click="onKurangiClick">Kurangi</button>
-    
+    <div class="tools">
+      <button class="btn-tools" @click="onChgServe">Service Over</button>
+      <button class="btn-tools" @click="onResetScore">Reset Score</button>
+    </div>
+    <div class="tools">
+      <button class="btn-tools" @click="onGameSet">Game Set</button>
+      <button class="btn-tools" @click="onUndoGameSet">Undo Set</button>
+    </div>
+    <div class="summary">
+      <table class="summary-table">
+        <tr v-for="(player, index) in players">
+          <td>{{player.name}}</td>
+          <td v-for="(score, idx) in player.setRslt">
+            {{ score }}
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
   <script src="app.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: lightgrey;
+    }
+
+    #app {
+      margin-top: 20px;
+    }
+
+    .col {
+      float: left;
+      width: 50%;
+      text-align: center;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .summary {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .player {
+      width: 100%;
+      text-align: center;
+      font-size: xx-large;
+      background: none;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      border: none;
+    }
+
+    .score {
+      font-size: 60px;
+      padding: 0;
+      margin-top: -5px;
+      margin-bottom: -5px;
+      font-family: monospace;
+    }
+
+    .tools {
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .serve {
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    .btn-score {
+      font-size: x-large;
+      width: 50px;
+      height: 50px;
+      margin: 0 10px;
+    }
+
+    .btn-tools {
+      width: 100px;
+      height: 50px;
+      margin: 0 10px;
+    }
+
+    .summary-table, .summary-table th, .summary-table td {
+      border: solid 1px;
+    }
+
+    .summary-table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .summary-table td {
+      padding: 5px;
+      font-size: large;
+    }
+  </style>
 </body>
+
 </html>

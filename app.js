@@ -1,50 +1,58 @@
 const app = Vue.createApp({
   data() {
     return {
-      daftarPeserta: [
+      players: [
         {
-          nama: 'Robby',
-          umur: 38
+          name: '',
+          placeholder: 'Pemain 1',
+          score: 0,
+          setRslt: [],
+          serve: '-serve-'
         },
         {
-          nama: 'Ali',
-          umur: 39
-        },
-        {
-          nama: 'Ares',
-          umur: 32
-        },
-        {
-          nama: 'Ditto',
-          umur: 31
+          name: '',
+          placeholder: 'Pemain 2',
+          score: 0,
+          setRslt: [],
+          serve: '-'
         }
       ],
-      pendaftaran: {
-        nama: '',
-        umur: null
-      },
-      jam: ''
+      serve: true
     }
   },
   methods: {
-    onKurangiClick() {
-      this.daftarPeserta.pop()
+    onKurangClick(playerNumber) {
+      if (this.players[playerNumber].score > 0) this.players[playerNumber].score--
     },
-    onTambahClick() {
-      this.daftarPeserta.push(
-        JSON.parse(JSON.stringify(this.pendaftaran))
-      )
-      this.pendaftaran.nama = ''
-      this.pendaftaran.umur = null
+    onTambahClick(playerNumber) {
+      this.players[playerNumber].score++
     },
-    updateJam() {
-      setInterval(() => {
-        this.jam = Date()
-      }, 1000)
+    onGameSet() {
+      this.players.forEach(player => {
+        player.setRslt.push(player.score)
+        player.score = 0
+      })
+    },
+    onUndoGameSet() {
+      this.players.forEach(player => {
+        player.score = player.setRslt.slice(-1)[0]
+        player.setRslt.pop()
+      })
+    },
+    onChgServe() {
+      this.players.forEach(player => {
+        if (player.serve == '-serve-') {
+          player.serve = '-'
+        } else {
+          player.serve = '-serve-'
+        }
+      })
+    },
+    onResetScore() {
+      this.players.forEach(player => {
+        player.score = 0
+      })
     }
-  },
-  mounted() {
-    this.updateJam()
   }
 })
 
